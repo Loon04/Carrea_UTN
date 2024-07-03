@@ -1,4 +1,3 @@
-import pygame
 
 NEGRO = (0, 0, 0)
 BLANCO = (255, 255, 255)
@@ -18,22 +17,7 @@ GRIS = (128, 128, 128)
 GRIS_CLARO = (200, 200, 200)
 GRIS_OSCURO = (64, 64, 64)
 
-x_preguntas = 350
-y_preguntas = 50
-width_preguntas = 180
-height_preguntas = 100
-
-x_cuadro_res = 220
-y_cuadro_res = 480
-width_res = 60
-height_res = 30
+color_pos_texto = BLANCO
 
 
-score = "Score:"
 
-pygame.init()
-
-pygame.font.get_fonts()
-
-myfont = pygame.font.SysFont("Calibri", 30)
-myfontGrande = pygame.font.SysFont("Calibri", 40)
