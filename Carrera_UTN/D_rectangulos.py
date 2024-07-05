@@ -10,7 +10,8 @@ pygame.font.get_fonts()
 
 myfont = pygame.font.SysFont("Calibri", 30)
 myfontGrande = pygame.font.SysFont("Calibri", 40)
-
+my_font_titulo = pygame.font.Font("Carrera_UTN\Font nueva\CHAINREACT BLOCK BOXTER REGULAR.OTF",80) #para fonts dercargados
+myfont_arcade = pygame.font.Font("Carrera_UTN\Font nueva\CHAINREACT BLOCK BOXTER REGULAR.OTF", 30)
 
 x_rect_imagen = 150
 y_rect_imagen = 200
@@ -49,9 +50,9 @@ def blit_cuadro_con_texto(ventana:pygame.Surface,texto:str,rectangulo,color,most
 
 rectangulo_nombre_del_juego = crear_rectangulo(400,80,200,80)
 
-rectangulo_ingreso = crear_rectangulo(400,440-80,200,80)
+rectangulo_ingreso = crear_rectangulo(300,440-100,400,100)
 
-rectangulo_nombre_del_jugador = crear_rectangulo(400,240-80,200,80)
+rectangulo_texto_nombre_del_jugador = crear_rectangulo(400,240-80,200,80)
 
 rectangulo_empezar = crear_rectangulo(600,550,180,100)
 
@@ -111,11 +112,11 @@ rectangulo_tema_pregunta = crear_rectangulo(100,580,100,30)
 #SCORE
 rectangulo_score = crear_rectangulo(840,500,50,30)
 
-rectangulo_SCORE_int = crear_rectangulo(820,550,50,30)
+rectangulo_SCORE_int = crear_rectangulo(820,140,100,50)
 
 #TIEMPO
 
-rectangulo_tiempo = crear_rectangulo(720,0,50,30)
+rectangulo_tiempo = crear_rectangulo(820,90,100,50)
 
 
 #ESCENARIO 2
@@ -124,3 +125,4 @@ rectangulo_volver = crear_rectangulo(600,550,180,100)
 
 rectangulo_tabla_de_puntos = crear_rectangulo(200,200,200,400)
 
+rectangulo_texto_puntos = crear_rectangulo(200,0,200,100)

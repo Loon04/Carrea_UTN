@@ -11,6 +11,7 @@ NARANJA = (255, 165, 0)
 ROSA = (255, 192, 203)
 MORADO = (128, 0, 128)
 CIAN = (0, 255, 255)
+GREENYELLOW = (173, 255, 47)
 
 # Otros colores
 GRIS = (128, 128, 128)

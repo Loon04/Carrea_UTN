@@ -22,12 +22,12 @@ def funcion_leer_json_array(ubicacion_archivo:str) -> list:
     except Exception as ex:
         print(ex)
         return []  #devuelvo una lista para que no retorne nonetype
-    
 
-lista_datos_personaje = funcion_leer_json_array("data_jugadores")
+
+lista_datos_personaje = funcion_leer_json_array("Carrera_UTN\data_jugadores")
 #dejar aca sino si se guarda el aneterior nombre de la anterior partida
 
-lista_data = funcion_leer_json_array("data_preguntas.json")
+lista_data = funcion_leer_json_array("Carrera_UTN\data_preguntas.json")
 
 
 
@@ -49,18 +49,18 @@ def si_(lista):
 
 def ordenamiento_ascendente_descendente(lista:list, clave:str,ordenamiento:bool):
     """recorre la lista y oredena segun parametro ingesado,
-    puede ser de forma ascendente o descendente 
+    puede ser de forma ascendente o descendente
 
     Args:
         lista (list): lista de los personajes
-        clave (str): puede ser cualquier key de los diccionarios    
+        clave (str): puede ser cualquier key de los diccionarios
         ordenamiento (bool): se ingresa FALSE si es ascendete y TRUE si es descendente
 
     Returns:
         _type_: una NUEVA lista con las condiciones
     """
     if si_(lista) == True:
-        return sorted(lista, key = lambda x: x[clave],reverse= ordenamiento) 
+        return sorted(lista, key = lambda x: x[clave],reverse= ordenamiento)
     else:
         return False
 
@@ -120,6 +120,8 @@ def fin_de_lista_preguntas(diccionario:dict,lista_largo:list):
     if (diccionario["contador"] > (len(lista_largo)-1)):
         diccionario["contador"] = 0
         diccionario["estado_juego"] = 2
+        crear_archivo_de_puntuacion(diccionario,lista_datos_personaje) ##############
+        crear_lista_con_strings(lista_datos_personaje,lista_para_blitear)
         bandera = True
     return bandera
 
@@ -142,7 +144,7 @@ def cambio_escenario(boton:bool,diccionario:dict): #es solo un boton por escenar
     elif diccionario["estado_juego"] == 1:
         if boton:
             crear_archivo_de_puntuacion(diccionario,lista_datos_personaje) #las dos listas no son parametros
-            crear_lista_con_strings(lista_datos_personaje,lista_para_blitear) 
+            crear_lista_con_strings(lista_datos_personaje,lista_para_blitear)
             diccionario["estado_juego"] = 2
     elif diccionario["estado_juego"] == 0:
         if boton:
@@ -151,7 +153,7 @@ def cambio_escenario(boton:bool,diccionario:dict): #es solo un boton por escenar
 
 def crear_archivo_de_puntuacion(diccionario_juego:dict,lista:list):
     lista_con_datos = (crear_lista_con_puntajes(diccionario_juego,lista))
-    crear_leer_json("data_jugadores",lista_con_datos)
+    crear_leer_json("Carrera_UTN\data_jugadores",lista_con_datos)
 
 
 
@@ -168,8 +170,8 @@ def crear_lista_con_strings(lista_con_data_perosonajes:list,lista_para_blitear_e
 def blit_cuadros_de_texto_para_tabla(ventana:pygame.Surface,x:int,y:int,
     width:int,height:int,lista_de_tabla:list):
     for string in lista_de_tabla:
-        y += 40
-        texto = render_texto(string,ROJO,myfont)
+        y += 60
+        texto = render_texto(string,GREENYELLOW,myfont_arcade)
         rectanglulo_prueba = crear_rectangulo(x,y,width,height)
         blit_cuadro_con_texto(ventana,texto,rectanglulo_prueba,AZUL,False)
 
@@ -191,7 +193,7 @@ def validacion_respuesta(diccionario,lista_opcion,lista_respuesta,lectura_boton:
         if lista_opcion[diccionario["contador"]] == lista_respuesta[diccionario["contador"]]:
             diccionario["score"] = int(diccionario["score"]) + 10
             diccionario["respuesta_movimiento_correcta"] = True
-            diccionario["segundos"] = "5" 
+            diccionario["segundos"] = "5"
         else:
             diccionario["respuesta_movimiento_incorrecta"] = True
             diccionario["segundos"] = "5"
@@ -223,7 +225,7 @@ def mover_personaje(personaje:pygame.Rect,dic):
             personaje.x -= 100
     else:
         if dic["respuesta_movimiento_correcta"]:
-            personaje.x -= 200 
+            personaje.x -= 200
         elif dic["respuesta_movimiento_incorrecta"]:
             personaje.x += 100
 
@@ -235,7 +237,7 @@ def mover_personaje(personaje:pygame.Rect,dic):
         dic["bandera_nivel_personaje"] = False
         personaje.y = 300
         personaje.x = 900
-    
+
     if personaje.x > pared_derecha.x and dic["bandera_nivel_personaje"] == False:
         dic["bandera_nivel_personaje"] = True
         personaje.y = 200
@@ -244,7 +246,7 @@ def mover_personaje(personaje:pygame.Rect,dic):
     if personaje.x < pared_izquierda.x and dic["bandera_nivel_personaje"] == True:
         personaje.y = y_rec_personaje_inicio
         personaje.x = x_rec_personaje_inicio
-    
+
     if personaje.x < pared_izquierda.x and dic["bandera_nivel_personaje"] == False:
         dic["estado_juego"] = 2
         crear_archivo_de_puntuacion(dic,lista_datos_personaje) ##############
@@ -268,13 +270,24 @@ def tiempo(dic,fin_tiempo):
         crear_lista_con_strings(lista_datos_personaje,lista_para_blitear)
     return fin_tiempo
 
+def subir(diccionario):
+        a =diccionario["ingreso"]
+        diccionario["ingreso"] = a.upper()
 
 def cambiar_color_texto(pos_mouse,rectangulo):
     if rectangulo.collidepoint(pos_mouse):
-        color_pos_texto = NEGRO
+        color_pos_texto = ROJO
     else:
-        color_pos_texto = BLANCO
+        color_pos_texto = NEGRO
     return color_pos_texto
+
+def manejar_ingreso(diccionarios):
+    bandera_manejo_ingreso = True
+    if len(diccionarios["ingreso"]) >= 10:
+        bandera_manejo_ingreso = False
+    else:
+        bandera_manejo_ingreso = True
+    return bandera_manejo_ingreso
 
 def blit_del_juego(SCREEN:pygame.Surface,diccionario:dict,cursor_pos):
     if diccionario["estado_juego"] == 1:
@@ -296,7 +309,7 @@ def blit_del_juego(SCREEN:pygame.Surface,diccionario:dict,cursor_pos):
         animar_moviento(SCREEN,imagen_cuadro_azul,rec_9)
         animar_moviento(SCREEN,imagen_personaje,rec_personaje)
 
-        color_pos_texto = cambiar_color_texto(cursor_pos,rectangulo_terminar) 
+        color_pos_texto = cambiar_color_texto(cursor_pos,rectangulo_terminar)
         texto_terminar = render_texto("TERMINAR",color_pos_texto,myfont) #
         blit_cuadro_con_texto(SCREEN,texto_terminar,rectangulo_terminar,VERDE,True)
 
@@ -304,15 +317,15 @@ def blit_del_juego(SCREEN:pygame.Surface,diccionario:dict,cursor_pos):
         pregunta_en_lista = render_texto(lista_preguntas[diccionario["contador"]],ROJO,myfont) #
         blit_cuadro_con_texto(SCREEN,pregunta_en_lista,rectangulo_pregunta_en_lista,VERDE,False)
 
-        color_pos_texto = cambiar_color_texto(cursor_pos,rectangulo_dato_a) 
+        color_pos_texto = cambiar_color_texto(cursor_pos,rectangulo_dato_a)
         dato_a = render_texto(lista_dato_a[diccionario["contador"]],color_pos_texto,myfont) #
         blit_cuadro_con_texto(SCREEN,dato_a,rectangulo_dato_a,VERDE,False)
 
-        color_pos_texto = cambiar_color_texto(cursor_pos,rectangulo_dato_b) 
+        color_pos_texto = cambiar_color_texto(cursor_pos,rectangulo_dato_b)
         dato_b = render_texto(lista_dato_b[diccionario["contador"]],color_pos_texto,myfont)  #
         blit_cuadro_con_texto(SCREEN,dato_b,rectangulo_dato_b,VERDE,False)
 
-        color_pos_texto = cambiar_color_texto(cursor_pos,rectangulo_dato_c) 
+        color_pos_texto = cambiar_color_texto(cursor_pos,rectangulo_dato_c)
         dato_c = render_texto(lista_dato_c[diccionario["contador"]],color_pos_texto,myfont)
         blit_cuadro_con_texto(SCREEN,dato_c,rectangulo_dato_c,VERDE,False)
 
@@ -320,37 +333,42 @@ def blit_del_juego(SCREEN:pygame.Surface,diccionario:dict,cursor_pos):
         blit_cuadro_con_texto(SCREEN,tema_pregunta,rectangulo_tema_pregunta,VERDE,False)
 
 
-        int_score_render = myfontGrande.render(f'SCORE: {str(diccionario["score"])}',True,GRIS_OSCURO) #NUMERO SCORE
+        int_score_render = myfontGrande.render(f'SCORE: {str(diccionario["score"])}',True,ROJO) #NUMERO SCORE
         blit_cuadro_con_texto(SCREEN,int_score_render,rectangulo_SCORE_int,VERDE,False)
 
 
         #Tiempo
-        tiempo_render = myfontGrande.render(f'TIEMPO: {str(diccionario["segundos"])}',True,GRIS_OSCURO)
+        tiempo_render = myfontGrande.render(f'TIEMPO: {str(diccionario["segundos"])}',True,ROJO)
         blit_cuadro_con_texto(SCREEN,tiempo_render,rectangulo_tiempo,VERDE,False)
 
 
     elif diccionario["estado_juego"] == 0:
-        CARRERA_UTN = render_texto("CARRERA UTN",ROJO,myfontGrande) #
+        subir(diccionario) ###############################
+        CARRERA_UTN = render_texto("CARRERA UTN",ROJO,my_font_titulo) #
         blit_cuadro_con_texto(SCREEN,CARRERA_UTN,rectangulo_nombre_del_juego,VERDE,False)
-        
-        NOMBRE_DE_JUGADOR = render_texto("NOMBRE DEL JUGADOR:",ROJO,myfontGrande) #
-        blit_cuadro_con_texto(SCREEN,NOMBRE_DE_JUGADOR,rectangulo_nombre_del_jugador,VERDE,False)
 
-        texto_ingreso = render_texto(diccionario["ingreso"],ROJO,myfont)  
-        blit_cuadro_con_texto(SCREEN,texto_ingreso,rectangulo_ingreso,VERDE,True)
+        NOMBRE_DE_JUGADOR = render_texto("NOMBRE DEL JUGADOR:",ROJO,my_font_titulo) #
+        blit_cuadro_con_texto(SCREEN,NOMBRE_DE_JUGADOR,rectangulo_texto_nombre_del_jugador,VERDE,False)
 
-        color_pos_texto = cambiar_color_texto(cursor_pos,rectangulo_empezar) ##################
-        EMPEZAR = render_texto("EMPEZAR",color_pos_texto,myfont) ############
+        texto_ingreso = render_texto(diccionario["ingreso"],ROJO,my_font_titulo)
+        blit_cuadro_con_texto(SCREEN,texto_ingreso,rectangulo_ingreso,NEGRO,True)
+
+        color_pos_texto = cambiar_color_texto(cursor_pos,rectangulo_empezar)
+        EMPEZAR = render_texto("EMPEZAR",color_pos_texto,myfont)
         blit_cuadro_con_texto(SCREEN,EMPEZAR,rectangulo_empezar,VERDE,True)
 
     elif diccionario["estado_juego"] == 2:
 
-        color_pos_texto = cambiar_color_texto(cursor_pos,rectangulo_volver) 
+        SCREEN.fill(NEGRO)
+        color_pos_texto = cambiar_color_texto(cursor_pos,rectangulo_volver)
         texto_volver = render_texto("VOLVER",color_pos_texto,myfont)
         blit_cuadro_con_texto(SCREEN,texto_volver,rectangulo_volver,VERDE,True)
-        
-        pygame.draw.rect(SCREEN,NEGRO,(90,90,410,500)) #########
-        blit_cuadros_de_texto_para_tabla(SCREEN,200,50,200,50,lista_para_blitear)
+
+        texto_mejores_puntajes = render_texto("MEJORES PUNTAJES",ROJO,myfont_arcade)
+        blit_cuadro_con_texto(SCREEN,texto_mejores_puntajes,rectangulo_texto_puntos,VERDE,False)
+
+
+        blit_cuadros_de_texto_para_tabla(SCREEN,200,40,200,50,lista_para_blitear)
 
 
 
